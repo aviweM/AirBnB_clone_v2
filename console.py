@@ -44,10 +44,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     try:
                         value = int(value)
-                    except:
+                    except Exception as e:
                         try:
                             value = float(value)
-                        except:
+                        except Exception as err:
                             continue
                 new_dict[key] = value
         return new_dict
@@ -216,7 +216,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
