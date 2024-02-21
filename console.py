@@ -13,23 +13,30 @@ from models.review import Review
 import shlex
 
 
+classes = {
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+            }
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    # prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    prompt = '(hbnb) '
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
                'State': State, 'City': City, 'Amenity': Amenity,
                'Review': Review
               }
-    dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
-    types = {
-             'number_rooms': int, 'number_bathrooms': int,
-             'max_guest': int, 'price_by_night': int,
-             'latitude': float, 'longitude': float
-            }
+    # dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
+    # types = {
+    #          'number_rooms': int, 'number_bathrooms': int,
+    #          'max_guest': int, 'price_by_night': int,
+    #          'latitude': float, 'longitude': float
+    #         }
 
     def _key_value_parser(self, args):
         """creates a dictionary from a list of strings"""
@@ -52,67 +59,66 @@ class HBNBCommand(cmd.Cmd):
                 new_dict[key] = value
         return new_dict
 
-    def preloop(self):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb)')
+    # def preloop(self):
+    #     """Prints if isatty is false"""
+    #     if not sys.__stdin__.isatty():
+    #         print('(hbnb)')
 
-    def precmd(self, line):
-        """Reformat command line for advanced command syntax.
+    # def precmd(self, line):
+    #     """Reformat command line for advanced command syntax.
 
-        Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
-        (Brackets denote optional fields in usage example.)
-        """
-        _cmd = _cls = _id = _args = ''  # initialize line elements
+    #     Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
+    #     (Brackets denote optional fields in usage example.)
+    # """
+    #     _cmd = _cls = _id = _args = ''  # initialize line elements
 
-        # scan for general formating - i.e '.', '(', ')'
-        if not ('.' in line and '(' in line and ')' in line):
-            return line
+    #     # scan for general formatting - i.e '.', '(', ')'
+    #     if not ('.' in line and '(' in line and ')' in line):
+    #         return line
 
-        try:  # parse line left to right
-            pline = line[:]  # parsed line
+    #     try:  # parse line left to right
+    #         pline = line[:]  # parsed line
 
-            # isolate <class name>
-            _cls = pline[:pline.find('.')]
+    #         # isolate <class name>
+    #         _cls = pline[:pline.find('.')]
 
-            # isolate and validate <command>
-            _cmd = pline[pline.find('.') + 1:pline.find('(')]
-            if _cmd not in HBNBCommand.dot_cmds:
-                raise Exception
+    #         # isolate and validate <command>
+    #         _cmd = pline[pline.find('.') + 1:pline.find('(')]
+    #         if _cmd not in HBNBCommand.dot_cmds:
+    #             raise Exception
 
-            # if parantheses contain arguments, parse them
-            pline = pline[pline.find('(') + 1:pline.find(')')]
-            if pline:
-                # partition args: (<id>, [<delim>], [<*args>])
-                pline = pline.partition(', ')  # pline convert to tuple
+    #         # if parentheses contain arguments, parse them
+    #         pline = pline[pline.find('(') + 1:pline.find(')')]
+    #         if pline:
+    #             # partition args: (<id>, [<delim>], [<*args>])
+    #             pline = pline.partition(', ')  # pline convert to tuple
 
-                # isolate _id, stripping quotes
-                _id = pline[0].replace('\"', '')
-                # possible bug here:
-                # empty quotes register as empty _id when replaced
+    #             # isolate _id, stripping quotes
+    #             _id = pline[0].replace('\"', '').strip()
 
-                # if arguments exist beyond _id
-                pline = pline[2].strip()  # pline is now str
-                if pline:
-                    # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] == '}'\
-                            and type(eval(pline)) is dict:
-                        _args = pline
-                    else:
-                        _args = pline.replace(',', '')
-                        # _args = _args.replace('\"', '')
-            line = ' '.join([_cmd, _cls, _id, _args])
+    #             # if arguments exist beyond _id
+    #             pline = pline[2].strip()  # pline is now str
+    #             if pline:
+    #                 # check for *args or **kwargs
+    #                 if pline[0] == '{' and pline[-1] == '}' and type(eval(pline)) is dict:
+    #                     _args = pline
+    #                 else:
+    #                     _args = pline.replace(',', '')
+    #                     # _args = _args.replace('\"', '')
 
-        except Exception as mess:
-            pass
-        finally:
-            return line
+    #         # Construct the formatted command line
+    #         line = f"{_cmd} {_cls} {_id} {_args}".strip()
 
-    def postcmd(self, stop, line):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
-        return stop
+    #     except Exception as mess:
+    #         pass
+    #     finally:
+    #         return line
+
+    # def postcmd(self, stop, line):
+    #     """Prints if isatty is false"""
+    #     if not sys.__stdin__.isatty():
+    #         print('(hbnb) ', end='')
+    #     return stop
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
@@ -226,23 +232,22 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
-    def do_all(self, args):
-        """ Shows all objects, or all objects of a class"""
-        print_list = []
-
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+    def do_all(self, arg):
+        """Prints string representations of instances"""
+        args = shlex.split(arg)
+        obj_list = []
+        if len(args) == 0:
+            obj_dict = storage.all()
+        elif args[0] in classes:
+            obj_dict = storage.all(classes[args[0]])
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            print("** class doesn't exist **")
+            return False
+        for key in obj_dict:
+            obj_list.append(str(obj_dict[key]))
+        print("[", end="")
+        print(", ".join(obj_list), end="")
+        print("]")
 
     def help_all(self):
         """ Help information for the all command """
