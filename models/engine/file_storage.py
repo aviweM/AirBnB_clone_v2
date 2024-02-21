@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-"""
-Contains the FileStorage class
-"""
+"""This module contains the FileStorage class"""
+
 
 import json
 from models.amenity import Amenity
@@ -18,7 +17,6 @@ classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
 
 class FileStorage:
     """serializes instances to a JSON file & deserializes back to instances"""
-
     __file_path = "file.json"
     __objects = {}
 

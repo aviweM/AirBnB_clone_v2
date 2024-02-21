@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-Contains the class DBStorage
-"""
+""" database storage class """
 
 from models.amenity import Amenity
 from models.base_model import Base
