@@ -4,10 +4,13 @@ from sqlalchemy.ext.declarative import declarative_base
 import uuid
 import models
 from datetime import datetime
-from sqlalchemy import sqlalchemy, Column, Integer, String, DateTime
+from sqlalchemy import Column, String, DateTime
 
 
-Base = declarative_base()
+if models.storage_t == "db":
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:
