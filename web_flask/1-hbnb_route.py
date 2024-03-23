@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Flask web application"""
 
-from crypt import methods
 from flask import Flask
 
 app = Flask(__name__)
