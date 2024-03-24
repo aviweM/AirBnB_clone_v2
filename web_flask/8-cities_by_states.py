@@ -6,6 +6,7 @@ starts a Flask web application
 from flask import Flask, render_template
 from models import storage
 from models import *
+
 app = Flask(__name__)
 
 
@@ -17,7 +18,7 @@ def cities_by_states():
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
+def teardown_db(error):
     """remove the current SQLAlchemy Session"""
     storage.close()
 
