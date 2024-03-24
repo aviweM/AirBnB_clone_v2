@@ -1,11 +1,12 @@
 #!/usr/bin/python3
-"""Flask web application"""
-
+"""
+starts a Flask web application
+"""
 from flask import Flask, render_template
 from models import *
 from models import storage
-
 app = Flask(__name__)
+
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
@@ -15,10 +16,9 @@ def states_list():
 
 
 @app.teardown_appcontext
-def close_session(exception):
-    """Close session"""
+def teardown_db(exception):
+    """closes the storage on teardown"""
     storage.close()
 
-
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port='5000')
