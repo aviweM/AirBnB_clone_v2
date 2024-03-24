@@ -84,6 +84,69 @@ INSERT INTO `states` VALUES ('421a55f4-7d82-47d9-b54c-a76916479545','2017-03-25 
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+DROP TABLE IF EXISTS `places`;
+CREATE TABLE places (
+	`city_id` VARCHAR(60) NOT NULL, 
+	`user_id` VARCHAR(60) NOT NULL, 
+	`name` VARCHAR(128) NOT NULL, 
+	`description` VARCHAR(1024), 
+	`number_rooms` INTEGER NOT NULL, 
+	`number_bathrooms` INTEGER NOT NULL, 
+	`max_guest` INTEGER NOT NULL, 
+	`price_by_night` INTEGER NOT NULL, 
+	`latitude` FLOAT, 
+	`longitude` FLOAT, 
+	`id` VARCHAR(60) NOT NULL, 
+	`created_at` DATETIME, 
+	`updated_at` DATETIME, 
+	PRIMARY KEY (`id`), 
+	FOREIGN KEY(`city_id`) REFERENCES cities (`id`), 
+	FOREIGN KEY(`user_id`) REFERENCES users (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+	`email` VARCHAR(128) NOT NULL, 
+	`password` VARCHAR(128) NOT NULL, 
+	`first_name` VARCHAR(128), 
+	`last_name` VARCHAR(128), 
+	`id` VARCHAR(60) NOT NULL, 
+	`created_at` DATETIME, 
+	`updated_at` DATETIME, 
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `reviews`;
+CREATE TABLE `reviews` (
+	`place_id` VARCHAR(60) NOT NULL, 
+	`user_id` VARCHAR(60) NOT NULL, 
+	`text` VARCHAR(1024) NOT NULL, 
+	`id` VARCHAR(60) NOT NULL, 
+	`created_at` DATETIME, 
+	`updated_at` DATETIME, 
+	PRIMARY KEY (`id`), 
+	FOREIGN KEY(`place_id`) REFERENCES places (`id`), 
+	FOREIGN KEY(`user_id`) REFERENCES users (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `place_amenity`;
+CREATE TABLE place_amenity (
+	place_id VARCHAR(60) NOT NULL, 
+	amenity_id VARCHAR(60) NOT NULL, 
+	PRIMARY KEY (place_id, amenity_id), 
+	FOREIGN KEY(place_id) REFERENCES places (id) ON DELETE CASCADE ON UPDATE CASCADE, 
+	FOREIGN KEY(amenity_id) REFERENCES amenities (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `amenities`;
+CREATE TABLE amenities (
+	name VARCHAR(128) NOT NULL, 
+	id VARCHAR(60) NOT NULL, 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
